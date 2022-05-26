@@ -28,7 +28,7 @@ namespace API {
             doWhile(() => { // 目标节点存在后才初始化
                 this.coin = type === "watchlater" ? document.querySelector<any>(".u.coin") : document.querySelector<any>("[report-id*=coin]");
                 this.fav = type === "watchlater" ? document.querySelector<any>(".u.fav") : document.querySelector<any>("[report-id*=collect]");
-                return this.coin && this.fav && aid;
+                return this.coin && aid;
             }, () => this.init())
         }
         init() {
@@ -109,7 +109,7 @@ namespace API {
                     if (this.hold) {
                         this.span.classList.add("shake");
                         this.coin.classList.add("circle");
-                        this.fav.classList.add("circle");
+                        this.fav?.classList?.add("circle");
                         this.holdTimeout = setTimeout(() => {
                             if (this.hold) {
                                 // Todo: 触发三连
@@ -133,7 +133,7 @@ namespace API {
             }
             this.span.classList.remove("shake");
             this.coin.classList.remove("circle");
-            this.fav.classList.remove("circle");
+            this.fav?.classList?.remove("circle");
         }
         /** 图标及数目变化 */
         changeLiked() {
