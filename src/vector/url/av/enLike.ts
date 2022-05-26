@@ -50,6 +50,32 @@ namespace API {
             this.span = document.createElement("span");
             this.span.classList.add("ulike");
             (<any>this).coin.parentElement.insertBefore(this.span, this.coin);
+            let circleSvg: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            circleSvg.setAttribute("height", "35px");
+            circleSvg.setAttribute("width", "35px");
+            circleSvg.setAttribute("class", "circle-svg");
+            let circle: SVGCircleElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute("cx", "18");
+            circle.setAttribute("cy", "18");
+            circle.setAttribute("r", "15");
+            circle.setAttribute("stroke-width", "1.5");
+            circle.setAttribute("fill", "none");
+            circleSvg.appendChild(circle);
+            switch (this.type) {
+                case "bangumi": {
+                    this.coin.appendChild(circleSvg);
+                    break;
+                }
+                case "watchlater": {
+                    this.coin.appendChild(circleSvg);
+                    this.fav.appendChild(circleSvg);
+                    break;
+                }
+                default: {
+                    this.coin.appendChild(circleSvg);
+                    this.fav.appendChild(circleSvg);
+                }
+            }
             this.changeLiked();
             this.span.addEventListener("click", () => this.setLike()); // 单击点赞
             this.span.addEventListener("mousedown", ev => this.holdLike(ev)); // 按住触发
@@ -233,28 +259,52 @@ namespace API {
                   100% {
                     transform: translate(0, 0) rotate(0);
                 }
+            }
+            @keyframes circlerot {
+                0% {
+                    stroke-dasharray: 0 100;
+                }
+                100% {
+                    stroke-dasharray: 100 100;
+                }
             }`;
             switch (this.type) {
                 case "bangumi": {
                     style += `
                     .bangumi-header .header-info .count-wrapper .ulike {margin-left: 15px;position: relative;float: left;height: 100%;line-height: 18px;font-size: 12px;color: #222;}
-                    .bangumi-header .header-info .count-wrapper [report-id*=coin].circle {}`;
+                    .bangumi-header .header-info .count-wrapper .ulike.shake svg {animation: shake 1500ms ease-in-out infinite;}
+                    .bangumi-header .header-info .count-wrapper [report-id*=coin].circle {position: relative;}
+                    .bangumi-header .header-info .count-wrapper [report-id*=coin] .circle-svg {display: none;transform: rotate(270deg);}
+                    .bangumi-header .header-info .count-wrapper [report-id*=coin].circle .circle-svg circle {stroke: #00a1d6;stroke-dasharray: 100 100;animation: circlerot 2.5s linear 1;}
+                    .bangumi-header .header-info .count-wrapper [report-id*=coin].circle .circle-svg {display: inline;}`;
                     break;
                 }
                 case "watchlater": {
                     style += `
                     .video-info-module .number .ulike {margin-left: 15px;margin-right: 5px;}
                     .video-info-module .number .ulike.shake svg {animation: shake 1500ms ease-in-out infinite;}
-                    .video-info-module .number .u.coin.circle {}
-                    .video-info-module .number .u.fav.circle {}`;
+                    .video-info-module .number .u.coin.circle,
+                    .video-info-module .number .u.fav.circle {position: relative;}
+                    .video-info-module .number .u.coin .circle-svg,
+                    .video-info-module .number .u.fav .circle-svg {display: none;transform: rotate(270deg);}
+                    .video-info-module .number .u.coin.circle .circle-svg circle,
+                    .video-info-module .number .u.fav.circle .circle-svg circle {stroke: #00a1d6;stroke-dasharray: 100 100;animation: circlerot 2.5s linear 1;}
+                    .video-info-module .number .u.coin.circle .circle-svg,
+                    .video-info-module .number .u.fav.circle .circle-svg {display: inline;}`;
                     break;
                 }
                 default: {
                     style += `
                     .video-info-m .number .ulike {margin-left: 15px;margin-right: 5px;}
                     .video-info-m .number .ulike.shake svg {animation: shake 1500ms ease-in-out infinite;}
-                    .video-info-m .number [report-id*=coin].circle {}
-                    .video-info-m .number [report-id*=collect].circle {}`;
+                    .video-info-m .number [report-id*=coin].circle,
+                    .video-info-m .number [report-id*=collect].circle {position: relative;}
+                    .video-info-m .number [report-id*=coin] .circle-svg,
+                    .video-info-m .number [report-id*=collect] .circle-svg {display: none;transform: rotate(270deg);}
+                    .video-info-m .number [report-id*=coin].circle .circle-svg circle,
+                    .video-info-m .number [report-id*=collect].circle .circle-svg circle {stroke: #00a1d6;stroke-dasharray: 100 100;animation: circlerot 2.5s linear 1;}
+                    .video-info-m .number [report-id*=coin].circle .circle-svg,
+                    .video-info-m .number [report-id*=collect].circle .circle-svg {display: inline;}`;
                 }
             }
             addCss(style);
