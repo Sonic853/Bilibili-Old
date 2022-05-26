@@ -360,9 +360,9 @@ namespace API {
             if (this.hold) {
                 this.hold = false;
             }
-            if (this.holdTimeout) {
+            if (this.holdTimeout !== undefined) {
                 clearTimeout(this.holdTimeout);
-                this.holdTimeout = undefined;
+                this.holdTimeout = <any>undefined;
             }
             this.span.classList.remove("shake");
             this.coin.classList.remove("circle");
